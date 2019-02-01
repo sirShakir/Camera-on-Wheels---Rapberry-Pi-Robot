@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*body { margin-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px;  background:#ccc; font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+*/
+#all { width:900px; margin:20px auto;;}
+#header { height:100px;  border-radius:10px 10px 0 0;  background:#fff;box-shadow: 10px 10px 5px #888}
+#menu { height:30px; background:#9bb2c8;box-shadow: 10px 10px 5px #888}
+#body { background:#fff;box-shadow: 10px 10px 5px #888}
+#footer { height:20px;border-radius:0 0 20px 20px; background:#9bb2c8;box-shadow: 10px 10px 5px #888; text-align:center;}
+#body .center { margin:0 auto;  padding:20px 0;background:#000;}
+H1{color:green;text-align:center;	}

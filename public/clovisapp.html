@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>JSMpeg Stream Client</title>
+    <link rel="stylesheet" href="/clovisapp.css">
+    <!--<link href="css/style.css" rel="stylesheet" type="text/css">-->
+    <link rel="stylesheet" href="/css/radar.css">
+	<link rel="shortcut icon" href="/img/robot.ico">
+</head>
+<body>
+<div id="page">
+
+    <div class="towerContainer">
+        <div class="toweredge">
+            <span id="demoL">Left Motors Duty Cycle</span>
+            <br>
+            <input type="number" id="leftRange" min="71" max="255" value="100" onchange="leftWheelsModulateChange()"> 
+            <br>
+            <span id="demoR">Right Motors Duty Cycle</span>
+            <br>
+            <input type="number" id="rightRange" min="71" max="255" value="100" onchange="rightWheelsModulateChange()">
+            <br>
+            <span id="demoR">Motors Timeout</span>
+            <br>
+            <input type="number" id="timeoutRange" min="1000" max="10000" value="2000" onchange="wheelsTimeoutChange()"> 
+        </div>
+        <!-- <div id="imgDiv"> <canvas id="video-canvas" onclick="switchViews()"> </canvas></div>-->
+       <div id="imgDiv"> 
+            <canvas id="video_canvas" onclick="switchViews(0)"> </canvas>	
+            <div id="radarContainer" onclick="switchViews(1)">
+                    <canvas id="radar" width="400" height="400"></canvas>
+                    <canvas id="dataPlot" width="400" height="400"></canvas>
+                    <canvas id="needleRotation" width="400" height="400"></canvas>
+            </div>
+        </div>
+        <div class="toweredge2"></div> 
+    </div>
+
+    <div id="containLeft">
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"><img src="/img/doubleUp.png" alt="Smiley face" onclick="emitUp(1)"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"><img src="/img/goUpRed.png" alt="Smiley face" onclick="emitUp()" ></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"><img src="/img/dounleleft.png" alt="Smiley face" onclick="emitLeft(1)"></div>
+        <div class="left"><img src="/img/goLeft2.png" alt="Smiley face" onclick="emitLeft()"></div>
+        <div class="left"><img src="/img/stop.png" alt="Smiley face" onclick="emitStop()"></div>
+        <div class="left"><img src="/img/goRight.png" alt="Smiley face" onclick="emitRight()"></div>
+        <div class="left"><img src="/img/doubleRight.png" alt="Smiley face" onclick="emitRight(1)"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"><img src="/img/goDownRed.png" alt="Smiley face" onclick="emitDown()"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"><img src="/img/doubleDown.png" alt="Smiley face" onclick="emitDown(1)"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+    </div>
+
+    <div id="containMiddle">
+        <div class="middle"><img src="/img/snapchat.png" alt="Smiley face" onclick="emitSnapshot()"></div>
+        <div class="middle"><img src="/img/purple-restart-512.png" alt="Smiley face" onclick="emitRefresh()"></div>
+        <div class="middle"><img src="/img/precord.png" alt="Smiley face" onclick="emitRecord()"></div>
+        <div class="middle"></div>
+        <div class="middle"><img src="/img/whiteUP.png" alt="Smiley face" onclick="emitCameraTilt(3)"></div>
+        <div class="middle"></div>
+        <div class="middle"><img src="/img/whiteL.png" alt="Smiley face" onclick="emitCameraTilt(1)"></div>
+        <div class="middle"><img src="/img/stop.png" alt="Smiley face" onclick="emitCameraTilt(5)"></div>
+        <div class="middle"><img src="/img/whiteR.png" alt="Smiley face" onclick="emitCameraTilt(2)"></div>
+        <div class="middle"></div>
+        <div class="middle"><img src="/img/whiteDown.png" alt="Smiley face" onclick="emitCameraTilt(4)"></div>
+        <div class="middle"></div>
+    </div>
+
+    <div id="containRight">
+            <div class="right"></div>
+    </div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script> <!-- include socket.io client side script -->
+<script type="text/javascript" src="/jsmpeg.min.js"></script>
+<script type="text/javascript">
+    var canvas = document.getElementById('video_canvas');
+    var url = 'ws://'+document.location.hostname+':8082/';
+    var player = new JSMpeg.Player(url, {canvas: canvas});
+</script>
+<script type="text/javascript">
+        var socket = io(); //load socket.io-client and connect to the host that serves the page
+        
+        socket.on('radarMessage', function (dataAngle, dataDistance) {
+            //data should have distance and angle measurement
+            rapid(dataAngle, dataDistance);
+        });
+
+		function emitStop(){
+			socket.emit('stopRobot');
+		}
+		function emitLeft(information){
+			socket.emit('robotLeft', information);
+		}
+		function emitRight(information){
+			socket.emit('robotRight', information);
+		}
+		function emitUp(information){
+			socket.emit('robotUp', information);
+		}
+		function emitDown(information){
+			socket.emit('robotDown', information);
+        }
+        function emitSnapshot(){
+			socket.emit('robotSnapshot');
+        }
+        function emitRecord(){
+			socket.emit('robotRecord');
+        }
+        function emitRefresh(){
+            socket.emit('robotRefreshProcess');
+        }
+        function emitCameraTilt(tiltDirection){
+            if ( tiltDirection == 1){
+                socket.emit('cameraTiltLeft');
+            }else 
+            if ( tiltDirection == 2){
+                socket.emit('cameraTiltRight');
+            }else 
+            if ( tiltDirection == 3){
+                socket.emit('cameraTiltUp');
+            }else
+            if ( tiltDirection == 4){
+                socket.emit('cameraTiltDown');
+            }else
+            if ( tiltDirection == 5){
+                socket.emit('cameraTiltRestart');
+            }
+        }
+        var leftSpeed = document.getElementById("leftRange").value;
+        function leftWheelsModulateChange(){
+            leftSpeed = document.getElementById("leftRange").value;
+            if(leftSpeed > 255){
+                leftSpeed = 255;
+                document.getElementById("leftRange").value = leftSpeed;
+            }
+            socket.emit('changeModulationLeft', leftSpeed);
+        }
+        
+        var rightSpeed = document.getElementById("rightRange").value;
+        function rightWheelsModulateChange(){
+            rightSpeed = document.getElementById("rightRange").value;
+            if(rightSpeed > 255){
+                rightSpeed = 255;
+                document.getElementById("rightRange").value = rightSpeed;
+            }
+            socket.emit('changeModulationRight', rightSpeed);
+        }
+</script>
+
+<script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="/js/radar.js"></script>
+<script>
+	var distance = 0;
+	var angle = 0;
+	function rapid(dataAngle, dataDistance)
+    {	angle = dataAngle;
+        distance = dataDistance;
+        //set distance //set angle
+  
+	  $("#needleRotation").css("transform","rotate("+(angle+10).toString()+"deg) "); 
+  
+	  var c = document.getElementById("dataPlot");
+	  var ctx = c.getContext("2d");
+	  ctx.beginPath();
+	  ctx.arc(200-distance*Math.cos((angle-90)*0.0174532),200-distance*Math.sin((angle-90)*0.017453),1,0,2*Math.PI);
+	  ctx.strokeStyle = "#0f0";
+	  ctx.stroke();
+  
+	  //alert(angle);
+	  if(angle==(160+90) || angle == (30+90)) ctx.clearRect(0, 0, 400, 400);
+	  //document.getElementById('distance').innerHTML = (angle-90).toString();
+    }
+  //setInterval(rapid, 50)
+  var liveCameraDiv = document.getElementById('video_canvas');
+  function switchViews(oneorzero){
+      if(oneorzero == 0){
+        liveCameraDiv.style.display = "none";
+      }
+      if(oneorzero == 1){
+        liveCameraDiv.style.display = "inline-block";
+      }
+  }
+	var timeoutRange = document.getElementById("timeoutRange").value;
+  function wheelsTimeoutChange(){
+   	timeoutRange = document.getElementById("timeoutRange").value;
+ 	socket.emit("changeTimeout", timeoutRange);
+  }	  
+  </script>
+</body>
+</html>

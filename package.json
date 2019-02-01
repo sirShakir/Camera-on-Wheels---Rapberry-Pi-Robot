@@ -1,0 +1,16 @@
+{
+  "name": "clovis_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "clovisapp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socketio": "^1.0.0",
+    "terminate": "^2.1.2"
+  }
+}

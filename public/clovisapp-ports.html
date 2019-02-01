@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>JSMpeg Stream Client</title>
+    <link rel="stylesheet" href="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/clovisapp.css">
+
+	
+</head>
+<body>
+<div id="page">
+
+    <div class="towerContainer">
+        <div class="toweredge"></div>
+        <div id="imgDiv"> <canvas id="video-canvas"> </canvas></div>
+       <!-- <div id="imgDiv"> <img id="image">  </div>-->
+        <div class="toweredge2"></div> 
+    </div>
+
+    <div id="containLeft">
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/doubleUp.png" alt="Smiley face" ></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/goUpRed.png" alt="Smiley face" onclick="emitUp()" ></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/dounleleft.png" alt="Smiley face" ></div>
+        <div class="left"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/goLeft2.png" alt="Smiley face" onclick="emitLeft()"></div>
+        <div class="left"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/stop.png" alt="Smiley face" onclick="emitStop()"></div>
+        <div class="left"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/goRight.png" alt="Smiley face" onclick="emitRight()"></div>
+        <div class="left"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/doubleRight.png" alt="Smiley face" ></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/goDownRed.png" alt="Smiley face" onclick="emitDown()"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"></div>
+        <div class="left"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/doubleDown.png" alt="Smiley face" ></div>
+        <div class="left"></div>
+        <div class="left"></div>
+    </div>
+
+    <div id="containMiddle">
+        <div class="middle"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/snapchat.png" alt="Smiley face" onclick="emitSnapshot()"></div>
+        <div class="middle"></div>
+        <div class="middle"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/precord.png" alt="Smiley face" onclick="emitRecord()"></div>
+        <div class="middle"></div>
+        <div class="middle"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/goUPBlk.png" alt="Smiley face" ></div>
+        <div class="middle"></div>
+        <div class="middle"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/goLeft.png" alt="Smiley face" ></div>
+        <div class="middle"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/stop.png" alt="Smiley face" ></div>
+        <div class="middle"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/goRBlk.png" alt="Smiley face" ></div>
+        <div class="middle"></div>
+        <div class="middle"><img src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/img/goblkDown.png" alt="Smiley face" ></div>
+        <div class="middle"></div>
+    </div>
+
+    <div id="containRight">
+            <div class="right"></div>
+    </div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script> <!-- include socket.io client side script -->
+<script type="text/javascript" src="http://10.11.150.148/Ziroid_Functions/Clovis_App/public/jsmpeg.min.js"></script>
+<script type="text/javascript">
+    var canvas = document.getElementById('video-canvas');
+    var url = 'ws://'+document.location.hostname+':8082/';
+    var player = new JSMpeg.Player(url, {canvas: canvas});
+</script>
+	<script type="text/javascript">
+		var socket = io(); //load socket.io-client and connect to the host that serves the page
+
+		function emitStop(){
+			socket.emit('stopRobot')
+		}
+		function emitLeft(){
+			console.log(socket);
+			socket.emit('robotLeft')
+		}
+		function emitRight(){
+			socket.emit('robotRight')
+		}
+		function emitUp(){
+			socket.emit('robotUp')
+		}
+		function emitDown(){
+			socket.emit('robotDown')
+        }
+        function emitSnapshot(){
+			socket.emit('robotSnapshot')
+        }
+        function emitRecord(){
+			socket.emit('robotRecord')
+		}
+	</script>
+</body>
+</html>

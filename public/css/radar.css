@@ -1,0 +1,23 @@
+.clear { clear:both;}
+
+#radarContainer {
+	height:100%;
+	position:relative;
+}
+#radarContainer  canvas{
+	position:absolute;
+    left: 0;
+    right: 0;
+    margin:auto;
+}
+#needleRotation {
+	z-index:11;
+}
+#dataPlot{
+	z-index: 10
+
+}
+#radar{
+
+	z-index:9;
+}
